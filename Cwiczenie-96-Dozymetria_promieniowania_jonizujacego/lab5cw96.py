@@ -80,7 +80,7 @@ print('Nr płytki, Pomiary grubości[cm], Średnia grubość[cm]')
 for i, vali in enumerate(powerCuThic0):
     print(str(i+1) + ', ', end='')
     for j, valj in enumerate(vali):
-        print(str(valj), end = '')
+        print(str(round(valj, 2)), end = '')
         if j != 2:
             print(' ', end = '')
         else:
@@ -107,9 +107,9 @@ Dbackground = 1/mh.sqrt(N-1)*np.std(backgroundPower)
     # printy
 DbackgroundRelative = Dbackground/backgroundPowerMean*100
 print("\nANALIZA TŁA")
-print("Średnia moc: " + str(round(backgroundPowerMean, 5)) + "muSv/h")
-print("Niepewność mocy: " + str(round(Dbackground, 5)) + "muSv/h")
-print("Niepewność względna mocy: " + str(round(DbackgroundRelative, 4)) + "%")
+print("Średnia moc: " + str(round(backgroundPowerMean, 3)) + "muSv/h")
+print("Niepewność mocy: " + str(round(Dbackground+0.5e-3-1e-10, 3)) +  ', ' + str(round(2*Dbackground+0.5e-3-1e-10, 3)) + "muSv/h")
+print("Niepewność względna mocy: " + str(round(DbackgroundRelative+0.5e-2-1e-10, 2)) + "%")
 Dpower1Mean = ( Dpower1Mean0**2 + Dbackground**2 )**0.5 # niepewnosć mocy po odjęciu tła
 
 
@@ -139,13 +139,13 @@ pearson = pearsonr(power1Mean,power1Theor)[0]
 print('\nWspółczynnik korelacji Pearsona: ' + str(round(pearson, 5)))
     # printy
 print("\nWspółczynniki dopasowania funkcji:")
-print("a = " + str(round(a, 2)) + 'W*m^2\nu(a) = ' + str(round(Da, 2)) + 'W*m^2')
-print("x0 = " + str(round(x0, 2)) + 'cm\nu(a) = ' + str(round(Dx0, 2)) + 'cm^2')
-print("Niepewność odległości rzeczywistej u(xr) = " + str(round(Dxr, 2)) + 'cm')
+print("a = " + str(round(a, 0)) + 'W*m^2\nu(a) = ' + str(round(Da+0.5e-0-1e-10, 0)) +  ', ' + str(round(2*Da+0.5e-0-1e-10, 0)) + 'W*m^2')
+print("x0 = " + str(round(x0, 2)) + 'cm\nu(x0) = ' + str(round(Dx0+0.5e-2-1e-10, 2)) +  ', ' + str(round(2*Dx0+0.5e-2-1e-10, 2)) + 'cm^2')
+print("Niepewność odległości rzeczywistej u(xr) = " + str(round(Dxr+0.5e-2-1e-10, 2)) +  ', ' + str(round(2*Dxr+0.5e-2-1e-10, 2)) + 'cm')
 print('Odległość rzeczywista[cm, Moc średnia po podjęciu tła [muSv/h], Niepewność mocy [muSv/h]')
 print('\nSrednia reszt unormowanych: ' + str(round(DyFitMean, 3)) + '\nOdchylenie średniej reszt: ' + str(round(sigmaDyFitMean, 3)))
-print('Aktywność próbki: ' + str(round(A, 7)) + 'GBq')
-print('niepewność aktywności próbki: ' + str(round(DA, 7)) + 'GBq')
+print('Aktywność próbki: ' + str(round(A, 6)) + 'GBq')
+print('niepewność aktywności próbki: ' + str(round(DA+0.5e-6-1e-16, 6)) +  ', ' + str(round(2*DA+0.5e-6-1e-10, 6)) + 'GBq')
 print('\nKOŃCOWE REZULTATY\nGr. rzeczywista [cm], Moc [muSc/h], Niepewnosć mocy [muSc/h]')
 for i,j,k in zip(power1Dist + x0, power1Mean, Dpower1Mean):
     print(str(round(i, 2)) + ', ' + str(round(j, 2)) + ', ' + str(round(k, 3)) )
@@ -156,8 +156,8 @@ linsp = np.linspace(np.min(power1Dist) - linspExt*0.013, np.max(power1Dist) + li
 plt.plot(linsp + x0, f(linsp, *power1Params), color = 'red')
 plt.scatter(power1Dist + x0, power1Mean, color = 'purple')
 plt.errorbar(power1Dist + x0, power1Mean, yerr=Dpower1Mean, capsize=3, ls = 'none', color = "magenta",  elinewidth=0.8)
-plt.ylabel(r'Moc dawki skutecznej $P [\frac{\mu Sv}{h}]$', fontsize = 16)
-plt.xlabel(r'Odleglosc rzeczywista $x [cm]$', fontsize = 16)
+plt.ylabel(r'Moc dawki skutecznej $P [\frac{\mu Sv}{h}]$', fontsize = 20)
+plt.xlabel(r'Odleglosc rzeczywista $x [cm]$', fontsize = 20)
     # drugi wykres
 plt.subplot(122)
 power1Dist_ = np.zeros(np.size(power1Dist)-4) + x0
@@ -175,14 +175,14 @@ plt.plot(linsp + x0, f(linsp, *power1Params), color = 'red')
 plt.scatter(power1Dist_ + x0, power1Mean_, color = 'purple')
 plt.errorbar(power1Dist_ + x0, power1Mean_, yerr=Dpower1Mean_, capsize=3, ls = 'none', color = "magenta",  elinewidth=0.8)
 #plt.ylabel(r'Moc dawki skutecznej $P [\frac{\mu Sv}{h}]$')
-plt.xlabel(r'Odleglosc rzeczywista $x [cm]$', fontsize = 16)
+plt.xlabel(r'Odleglosc rzeczywista $x [cm]$', fontsize = 20)
     # różnice dopasowania
 plt.figure()
 plt.plot(power1Dist + x0, DyFit, color = 'red')
 plt.plot(power1Dist + x0, np.zeros(np.size(power1Dist)), color = 'black', linestyle = '--')
 plt.scatter(power1Dist + x0, DyFit, color = 'purple', marker = 'D')
-plt.ylabel(r'Reszty dopasowania $\frac{P_i - P(x_i)}{u(P_i)}$', fontsize = 16)
-plt.xlabel(r'Odleglosc rzeczywista $x [cm]$', fontsize = 16)
+plt.ylabel(r'Reszty dopasowania $\frac{P_i - P(x_i)}{u(P_i)}$', fontsize = 20)
+plt.xlabel(r'Odleglosc rzeczywista $x [cm]$', fontsize = 20)
 
 
 # osłabienie w miedzi
@@ -202,7 +202,7 @@ params = modelFit.params
 Dparams = modelFit.bse
 a = params[1] # współczynnik nachylenia
 b = params[0] # stała addytywna 
-Da = Dparams[1] 
+Da = Dparams[1] # model zwaraca od razu pierwiastek z wariancji
 Db = Dparams[0]
 # współczynnik osłabienia liniowego
 mum = -a/rhoCu
@@ -212,13 +212,13 @@ Dmu = Da
     # printy
 print("\nWspółczynniki dopasowania prostej")
 print('a = ' + str(round(a, 3)) + ' 1/cm')
-print('u(a) = ' + str(round(Da+5e-4-1e-10, 3)) + ' 1/cm')
+print('u(a) = ' + str(round(Da+5e-4-1e-10, 3)) +  ', ' + str(round(2*Da+0.5e-3-1e-10, 3)) + ' 1/cm')
 print('b = ' + str(round(b, 2)) + ' [1]')
-print('u(b) = ' + str(round(Db+5e-3-1e-10, 2)) + ' [1]')
+print('u(b) = ' + str(round(Db+5e-3-1e-10, 2)) +  ', ' + str(round(2*Db+0.5e-2-1e-10, 2)) + ' [1]')
 print('Moc bez osłabienia: ' + str(round(mh.e**b, 2)) + 'muSv/h')
-print('Niepewność mocy bez osłabienia: ' + str(round(Db*mh.e**b+0.5e-2+1e-10, 2)) + 'muSv/h')
-print('\nMasowy współczynnik odłabienia: ' + str(round(mum, 4)) + 'cm^2/g')
-print('Niepewność masowego współczynnika odłabienia: ' + str(round(Dmum+5e-5-1e-10, 4)) + 'cm^2/g')
+print('Niepewność mocy bez osłabienia: ' + str(round(Db*mh.e**b+0.5e-2+1e-10, 2)) +  ', ' + str(round(2*Db*mh.e**b+0.5e-2-1e-10, 2)) + 'muSv/h')
+print('\nMasowy współczynnik osłabienia: ' + str(round(mum, 4)) + 'cm^2/g')
+print('Niepewność masowego współczynnika osłabienia: ' + str(round(Dmum+5e-5-1e-10, 4)) +  ', ' + str(round(2*Dmum+0.5e-4-1e-10, 4)) + 'cm^2/g')
 print('\nKOŃCOWE REZULTATY')
 print('Grubość [mm], Niepewność [mm], Moc [muSv/h], Niepewność [muSv/h]')
 for i,j,k,l in zip(powerCuThic, DpowerCuThic, powerCuMean, DpowerCuMean):
@@ -233,8 +233,8 @@ plt.plot(linsp, a*linsp + b, color = 'red')
 #plt.plot(linsp, (a+Da)*linsp + b - Db)
 plt.scatter(powerCuThic, powerCuMeanLn, color = 'purple', s = 15)
 plt.errorbar(powerCuThic, powerCuMeanLn, yerr=DpowerCuMeanLn, xerr = DpowerCuThic, capsize=3, ls = 'none', color = 'magenta',  elinewidth=0.8)
-plt.xlabel("x [mm]")
-plt.ylabel("ln(P) [1]")
+plt.xlabel("x [mm]", fontsize = 20)
+plt.ylabel("ln(P) [1]", fontsize = 20)
 
 print()
-plt.show()
+#plt.show()
