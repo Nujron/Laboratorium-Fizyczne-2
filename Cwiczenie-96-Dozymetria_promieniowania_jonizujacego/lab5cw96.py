@@ -20,9 +20,9 @@ rhoCu = 8.96 # [g/cm**3]
 print()
 # WCZYTYWANIE DANCYH
 # czytanie excela
-excel1 = pd.read_excel('BYKz3c96v0.xlsx', sheet_name= "tło")
-excel2 = pd.read_excel('BYKz3c96v0.xlsx', sheet_name= "moc_odległość")
-excel3 = pd.read_excel('BYKz3c96v0.xlsx', sheet_name= "miedź")
+excel1 = pd.read_excel('BYKz04c96v0.xlsx', sheet_name= "tło")
+excel2 = pd.read_excel('BYKz04c96v0.xlsx', sheet_name= "moc_odległość")
+excel3 = pd.read_excel('BYKz04c96v0.xlsx', sheet_name= "miedź")
 #print(excel1)
 #print(excel2)
 #print(excel3)
@@ -237,4 +237,4 @@ plt.xlabel("x [mm]", fontsize = 20)
 plt.ylabel("ln(P) [1]", fontsize = 20)
 
 print()
-#plt.show()
+plt.show()
